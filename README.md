@@ -47,16 +47,6 @@ These compute local interaction importance and modify placement decisions based 
 
 ---
 
-## Geometric Realization
-
-After topology generation:
-
-```text
-Graph Topology
-        ↓
-commit_macro_positions.py
-        ↓
-Physical Coordinates
 # Installation & Running
 
 ## 1. Clone the repository
@@ -315,4 +305,7 @@ For full evaluation:
 
 ```bash
 uv run evaluate submissions/sidd/eval_bridge.py --all
+```
+
+eval_bridge.py --all
 ```
