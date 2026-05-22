@@ -1,4 +1,59 @@
 # Kattamaippu
 A topology-driven macro placement algorithm for fast chip design developed for Hudson River Trading × PARTCL. Achieved +28.4% average improvement over SA across all IBM benchmarks and outperformed Google's RePlAce on multiple designs with zero overlaps.
 
-The pipeline begins with parse_netlist.py, which extracts structural information from the benchmark netlist and transforms raw connectivity into graph-relevant data structures. build_graph.py constructs a weighted communication graph where nodes represent macros and edges encode interaction strength derived from net connectivity. Since not all macros contribute equally to information flow, detect_hubs.py identifies highly connected communication centers, while classify_roles.py assigns structural roles such as hubs, bridges, and peripheral nodes. communication_backbone.py then extracts a reduced communication skeleton intended to preserve dominant information pathways. The motivation for this graph stage originated from repeated observations that purely geometric methods scattered strongly connected macros across the floorplan and created large routing penalties despite visually compact layouts. Once the graph hierarchy is built, placement transitions into topology generation. Files such as preplace_anchor.py, create_hub_rails.py, place_boundary_nodes.py, and place_interdependent.py establish an organizational hierarchy where hubs become anchors and rails act as local placement corridors. The idea behind rails came from treating strongly interacting macro groups as transportation corridors rather than isolated blocks, allowing neighboring structures to remain near shared communication routes. adjacent_weights.py, rail_weights.py, and port_weights.py compute local interaction importance and adjust placement behavior according to structural proximity and communication pressure. bridge_connector.py explicitly handles graph bridge nodes to preserve long-range connectivity between regions. After tentative topology generation, commit_macro_positions.py converts the abstract graph arrangement into geometric coordinates. During experimentation, several approaches attempted aggressive compactification after placement; however, these frequently collapsed locality structure, generated dense congestion islands, and destabilized legalization. This led to the development of legalize.py, which shifted from brute-force compaction toward topology-preserving legalization. Rather than globally rearranging macros, legalization resolves overlaps while attempting to preserve neighborhood relationships and structural organization. Multiple strategies evolved over time, including center attraction, wall attraction, compactors, and nearest-boundary packing, many of which were abandoned because they improved visual compactness while worsening congestion and proxy cost. Once hard macros are legalized and frozen, soft_place.py fills remaining whitespace using macro dimensions and occupancy constraints. Instead of allowing soft macros to overlap or behave independently, the placer searches for available geometric regions while respecting hard macro obstacles and attempting edge-to-edge packing. This stage was motivated by the observation that naïve soft macro placement often dominated congestion metrics due to poor spatial organization even when hard macro placement itself remained valid. Finally, eval_bridge.py was introduced as an architectural compatibility layer allowing the repository evaluator to repeatedly inject benchmark instances without restructuring the original nested codebase. This enabled evaluation across all IBM benchmarks while preserving the modular design philosophy. Overall, the project evolved from experimenting with geometric compaction toward a topology-aware placement philosophy inspired by transportation systems, communication networks, and structural graph reasoning—prioritizing who should remain near whom before attempting to optimize where exactly they should sit.
+## Technical Overview
+
+The pipeline begins with `parse_netlist.py`, which extracts structural information from benchmark netlists and transforms raw connectivity into graph-relevant data structures. `build_graph.py` constructs a weighted communication graph where nodes represent macros and edges encode interaction strength derived from net connectivity.
+
+Since not all macros contribute equally to information flow:
+
+- `detect_hubs.py` identifies highly connected communication centers  
+- `classify_roles.py` assigns structural roles such as hubs, bridges, and peripheral nodes  
+- `communication_backbone.py` extracts a reduced communication skeleton intended to preserve dominant information pathways  
+
+The motivation for this graph stage originated from repeated observations that purely geometric methods scattered strongly connected macros across the floorplan and created large routing penalties despite visually compact layouts.
+
+---
+
+## Topology Generation
+
+Once the graph hierarchy is built, placement transitions into topology generation.
+
+The following modules establish organizational hierarchy:
+
+- `preplace_anchor.py`
+- `create_hub_rails.py`
+- `place_boundary_nodes.py`
+- `place_interdependent.py`
+
+In this framework:
+
+- Hubs become placement anchors
+- Rails act as local communication corridors
+- Neighboring structures remain spatially close
+- Communication locality is preserved
+
+The rail concept originated from treating strongly interacting macro groups as transportation corridors rather than isolated blocks.
+
+Additional weighting modules:
+
+- `adjacent_weights.py`
+- `rail_weights.py`
+- `port_weights.py`
+
+These compute local interaction importance and modify placement decisions based on structural proximity and communication pressure.
+
+`bridge_connector.py` explicitly handles bridge nodes to preserve long-range communication paths.
+
+---
+
+## Geometric Realization
+
+After topology generation:
+
+```text
+Graph Topology
+        ↓
+commit_macro_positions.py
+        ↓
+Physical Coordinates
