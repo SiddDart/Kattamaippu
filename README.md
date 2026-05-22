@@ -307,5 +307,17 @@ For full evaluation:
 uv run evaluate submissions/sidd/eval_bridge.py --all
 ```
 
-eval_bridge.py --all
-```
+## About Me
+
+This project was honestly a very fun experience for me because it was my **first time designing systems like this from scratch**. I come from a **Mechanical Engineering background**, and I’m currently involved in **MIT AeroAstro research**, so diving into chip placement, graph systems, topology generation, legalization, and physical design was completely new territory. A lot of the ideas here evolved through experimentation, failures, and trying weird things just to see what would happen.
+
+I genuinely value the opportunity provided by **Will** and the PARTCL challenge. Huge thanks to him for helping me navigate the process and for building something that let people explore ideas freely. I learned much more than I expected and honestly ended up enjoying the process a lot.
+
+I’d genuinely love to hear more from the PARTCL side. I know there’s still a lot more I can build and improve, and if there’s room to work further on these ideas, I’d absolutely be interested. I enjoyed this enough that I’d love the chance to contribute more — and I’d also love to explore internship opportunities at PARTCL.
+
+Feel free to reach out:
+
+📧 Email: siddharthaerospace@gmail.com  
+💼 LinkedIn: https://www.linkedin.com/in/sai-siddharth-sathyendran-4302b9212/
+
+Always happy to chat :)
