@@ -313,7 +313,7 @@ This project was honestly a very fun experience for me because it was my **first
 
 I genuinely value the opportunity provided by **Will** and the PARTCL challenge. Huge thanks to him for helping me navigate the process and for building something that let people explore ideas freely. I learned much more than I expected and honestly ended up enjoying the process a lot.
 
-I’d genuinely love to hear more from the PARTCL side. I know there’s still a lot more I can build and improve, and if there’s room to work further on these ideas, I’d absolutely be interested. I enjoyed this enough that I’d love the chance to contribute more — and I’d also love to explore internship opportunities at PARTCL.
+I’d genuinely love to hear more from the PARTCL side. I know there’s still a lot more I can build and improve, and if there’s room to work further on these ideas, I’d absolutely be interested. I enjoyed this enough that I’d love the chance to contribute more and I’d also love to explore internship opportunities(wihtout pay) at PARTCL!
 
 Feel free to reach out:
 
