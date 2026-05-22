@@ -57,3 +57,262 @@ Graph Topology
 commit_macro_positions.py
         ↓
 Physical Coordinates
+# Installation & Running
+
+## 1. Clone the repository
+
+```bash
+git clone https://github.com/SiddDart/Kattamaippu.git
+cd Kattamaippu
+```
+
+---
+
+## 2. Install dependencies
+
+This project uses `uv`.
+
+Install:
+
+```bash
+pip install uv
+```
+
+Then sync the environment:
+
+```bash
+uv sync
+```
+
+or:
+
+```bash
+uv pip install -r requirements.txt
+```
+
+---
+
+## 3. Repository placement
+
+This repository was designed to live inside the PARTCL Macro Placement Challenge structure.
+
+Expected structure:
+
+```text
+partcl-macro-place-challenge/
+│
+├── external/
+├── macro_place/
+├── submissions/
+│      └── sidd/
+│            ├── graph/
+│            ├── parser/
+│            ├── placement/
+│            ├── eval_bridge.py
+│            └── main.py
+│
+└── ...
+```
+
+Place the entire `sidd` folder inside:
+
+```text
+submissions/
+```
+
+Do NOT place only individual files.
+
+Wrong:
+
+```text
+submissions/
+    main.py
+```
+
+Correct:
+
+```text
+submissions/
+    sidd/
+        main.py
+        eval_bridge.py
+        graph/
+        parser/
+        placement/
+```
+
+---
+
+## 4. Move to challenge root
+
+Before running, your terminal should be inside:
+
+```text
+partcl-macro-place-challenge
+```
+
+Example:
+
+```powershell
+PS C:\Users\YOUR_NAME\partcl-macro-place-challenge>
+```
+
+Do NOT run inside:
+
+```text
+submissions/sidd/
+```
+
+or imports will fail.
+
+---
+
+## 5. Run all IBM benchmarks
+
+```bash
+uv run evaluate submissions/sidd/eval_bridge.py --all
+```
+
+This automatically runs:
+
+```text
+ibm01
+ibm02
+...
+ibm18
+```
+
+through the repository evaluation framework.
+
+---
+
+## Common Errors
+
+### ModuleNotFoundError: No module named 'submissions'
+
+Cause:
+
+Running from wrong directory.
+
+Wrong:
+
+```bash
+cd submissions/sidd
+uv run ...
+```
+
+Correct:
+
+```bash
+cd partcl-macro-place-challenge
+uv run evaluate submissions/sidd/eval_bridge.py --all
+```
+
+---
+
+### Failed to load placer
+
+Cause:
+
+Using:
+
+```bash
+uv run evaluate submissions.sidd.main --all
+```
+
+instead of:
+
+```bash
+uv run evaluate submissions/sidd/eval_bridge.py --all
+```
+
+Use file paths (`/`) not module notation (`.`).
+
+---
+
+### FileNotFoundError: eval_bridge.py
+
+Cause:
+
+Bridge file missing.
+
+Ensure:
+
+```text
+submissions/sidd/eval_bridge.py
+```
+
+exists.
+
+---
+
+### placement returned NoneType
+
+Cause:
+
+`main()` completed but never returned placement.
+
+Ensure:
+
+```python
+return placement
+```
+
+exists at the end of `main.py`.
+
+---
+
+### plc variable not defined
+
+Cause:
+
+Benchmark injection through evaluate bypasses internal benchmark loading.
+
+Fix:
+
+```python
+if benchmark is None:
+    benchmark, plc = load(...)
+else:
+    plc=benchmark.plc
+```
+
+---
+
+## Evaluation Philosophy
+
+The repository evaluator repeatedly injects benchmark instances:
+
+```text
+evaluate
+    ↓
+eval_bridge.py
+    ↓
+main.py
+    ↓
+graph construction
+    ↓
+topology generation
+    ↓
+legalization
+    ↓
+soft placement
+```
+
+The bridge layer preserves the nested architecture while allowing automatic execution across benchmark suites.
+
+---
+
+## Execute single benchmark
+
+For development:
+
+```bash
+python -m uv run -m submissions.sidd.main
+```
+
+For full evaluation:
+
+```bash
+uv run evaluate submissions/sidd/eval_bridge.py --all
+```
